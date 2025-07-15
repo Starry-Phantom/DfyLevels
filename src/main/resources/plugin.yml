@@ -1,0 +1,25 @@
+name: dfyLevels
+version: '1.0.0'
+main: me.Starry_Phantom.dfyLevels.DfyLevels
+api-version: '1.21'
+depend:
+  - LuckPerms
+authors: [ Starry_Phantom ]
+permissions:
+  dfylevels.admin.notifications:
+    description: Whether or not a member receives operator notifications
+    default: op
+  dfylevels.bits.manage:
+    description: Whether or not a member can manage others bits using /bits
+    default: op
+  dfylevels.admin:
+    description: Allows access to the main plugin command
+    default: op
+commands:
+  dfylevels:
+    description: Core plugin functions. Run for /dfylevels help for help!
+    usage: /dfylevels
+    aliases: dfl
+  bits:
+    description: Used to manage bits of players
+    usage: /bits <set|get|add|remove> [player] <amount>
