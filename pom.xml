@@ -80,4 +80,11 @@
             <version>2.5-SNAPSHOT</version>
         </dependency>
     </dependencies>
+
+    <distributionManagement>
+        <repository>
+            <id>github</id>
+            <url>https://maven.pkg.github.com/Starry-Phantom/dfyLevels</url>
+        </repository>
+    </distributionManagement>
 </project>
