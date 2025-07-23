@@ -75,6 +75,7 @@ public final class DfyLevels extends JavaPlugin {
     private void registerListeners() {
         Bukkit.getPluginManager().registerEvents(new Notifier(this), this);
         Bukkit.getPluginManager().registerEvents(new ChatManager(this), this);
+        Bukkit.getPluginManager().registerEvents(new TabManager(this, luckPerms), this);
     }
 
     private void registerCommands() {

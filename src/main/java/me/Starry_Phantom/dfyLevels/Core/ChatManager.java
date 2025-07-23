@@ -6,14 +6,23 @@ import me.Starry_Phantom.dfyLevels.DfyLevels;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.ComponentBuilder;
+import net.kyori.adventure.text.TextComponent;
+import net.luckperms.api.LuckPerms;
+import net.luckperms.api.cacheddata.CachedDataManager;
+import net.luckperms.api.cacheddata.CachedMetaData;
+import net.luckperms.api.model.user.User;
+import net.luckperms.api.model.user.UserManager;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 
-public class ChatManager implements Listener, ChatRenderer {
-    private final DfyLevels PLUGIN;
+import java.util.concurrent.CompletableFuture;
 
-    public ChatManager(DfyLevels plugin) {this.PLUGIN = plugin;}
+public class ChatManager implements Listener, ChatRenderer {
+    private static LuckPerms luckPerms;
+    private static DfyLevels PLUGIN;
+
+    public ChatManager(DfyLevels plugin) {PLUGIN = plugin;}
 
     @EventHandler
     public void onChat(AsyncChatEvent event) {
@@ -23,18 +32,26 @@ public class ChatManager implements Listener, ChatRenderer {
     @Override
     public Component render(Player player, Component displayName, Component message, Audience audience) {
         ComponentBuilder builder = Component.text();
-        builder.append(Component.text("§8[]-"));
-        // TODO: Add badge handling
-
-        String prefix;
-        try {
-            prefix = PLUGIN.getLuckPerms().getUserManager().getUser(player.getUniqueId()).getCachedData().getMetaData().getPrefix();
-        } catch (NullPointerException e) {prefix = "§f";}
-        if (prefix == null) prefix = "§f";
-
-        builder.append(TextUtilities.applyHexColoring(prefix + player.getName()));
+        builder.append(TextUtilities.applyHexColoring("§8[]-"));
+        builder.append(getDisplayName(player));
         builder.append(Component.text("§r§f: "));
         builder.append(message);
         return builder.build();
+    }
+
+    public static TextComponent getDisplayName(Player player) {
+        String prefix;
+        CompletableFuture<String> futureString = CompletableFuture.supplyAsync(() -> {
+            String futurePrefix;
+            try {
+                futurePrefix = PLUGIN.getLuckPerms().getUserManager().getUser(player.getUniqueId()).getCachedData().getMetaData().getPrefix();
+            } catch (NullPointerException e) {futurePrefix = "§f";}
+            if (futurePrefix == null) futurePrefix = "§f";
+            return futurePrefix;
+        });
+        prefix = futureString.join();
+
+        return TextUtilities.applyHexColoring( prefix + player.getName());
+
     }
 }
