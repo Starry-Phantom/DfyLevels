@@ -1,5 +1,5 @@
 name: dfyLevels
-version: '1.0.0'
+version: '1.1.0'
 main: me.Starry_Phantom.dfyLevels.DfyLevels
 api-version: '1.21'
 depend:
